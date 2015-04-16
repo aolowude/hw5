@@ -144,18 +144,21 @@ int kkv_get(uint32_t key, char *value, size_t max_size, int flags);
 
 	//have a set of nested statement where you check, if bucket has a count, is entry the correct entry, copy_to_user(), and delete that entry
 struct kkv_ht_bucket *bucket;
-
+strcut kkv_ht_entry_ *c;
 //get hash value 
 
-/*
 	int hval = rand() % key;
 	bucket = hashtable[hval];
 	
 	if (bucket->count !=0){
-		copy_to_user
+		//not in list
+		if ((c.kv_pair).size == max_size)
+			return -ENOENT;
+		copy_to_user(value, (c->kv_pair).value, max_size);
+		//delete the entry now
+		return 0;
 	}
-*/
-
+	return -ENOENT;
 }
 
 /* 
