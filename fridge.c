@@ -59,7 +59,7 @@ int kkv_init(int flags)
 		for(i = 0; i < HASH_TABLE_LENGTH; ++i)	
 		{
 			//init bucket 
-			INIT_LIST_HEAD(&(kv_ht_bucket->enteries));
+			INIT_LIST_HEAD(&(kv_ht_bucket->entries));
 			kv_ht_bucket->count =0;
 			spin_lock_init(&(kv_ht_bucket->lock);
 	
@@ -101,7 +101,7 @@ int kkv_destroy(int flags)
 		for(k = 0; k < HASH_TABLE_LENGTH; ++k)
 		{
 			if (in != count){
-			list_for_each_entry(c, (&(in->enteries)), enteries){
+			list_for_each_entry(c, (&(in->entries)), entries){
 				//kfree
 				//list_del
 				//kfree
@@ -183,16 +183,37 @@ int kkv_put(uint32_t key, char *value, size_t size, int flags);
 	struct entries *
 
 	//create pair, entry, set all the values of those things (assign values)
-	struct kkv_pair *kvpair;
+	struct kkv_pair *kvpair;	
 	struct kkv_entry *kventry;
-
-	value = kvpair->&value;
-	key = kvpair->key;
-	size = kvpair->size
+	kventry = kmalloc(sizeof(kkv_entry));
+	kvpair = kventry->kkv_pair;
+	kvpair->value = kmalloc(sizeof(value));
+	
+	kvpair->value=value;
+	kvpair->key=key;
+	kvpair->size=size;
 					
 	//create entries
-	struct list_head entries = kventry->entries;
-	struct kkv_pair kv_pair = kventry->kv_pair;
+	//struct list_head entries = kventry->entries;
+	//struct kkv_pair kv_pair = kventry->kv_pair;
+	list_add(kventry->entries, hashtable->entries);
+	return 0;
 }
 
+int sinit()
+{
+	kkv_init();
+	kkv_destroy();
+	kkv_get();
+	kkv_put();
+	return 0;
+}
 
+void sexit()
+{
+	kkv_destroy();
+	printk(KERNINFO, "removing module\n");
+}
+
+module_init(sinit);
+module_exit(sexit);
